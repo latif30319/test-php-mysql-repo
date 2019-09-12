@@ -1,0 +1,97 @@
+#
+# Copyright (c) 2001-2005 Easysoft Ltd. All rights reserved.
+#
+# $Id: install_check_sunos 32 2005-03-02 17:59:57Z martin $
+#
+# This script checks this SunOS is OK for this product
+#
+# Calling format:
+#
+# install_check_sunos long_product_name
+#
+# long_product_name - name of product being installed (may contain spaces)
+#
+# returns:
+#
+# 0 = success
+# 1 = invalid command line
+# 2 = environment variable not defined
+# 3 = installing 64bit distribution on 32bit platform
+#
+if [ "$ECHO" = "" ];then
+  echo "error - ECHO not defined, expect it to be exported"
+  exit 2
+fi
+#
+# Check command line
+#
+cmdline_error=""
+if [ $# -ne 1 ];then
+  cmdlinestr="incorrect number of parameters"
+  cmdline_error="1"
+else
+  PRODUCTLONG="$1"
+fi
+#
+# If command line error
+#
+if [ "$cmdline_error" = "1" ];then
+  $ECHO "Invalid command line, $cmdlinestr"
+  $ECHO "Usage:"
+  $ECHO "install_intro long_product_name"
+  exit 1
+fi
+#
+#
+#
+osrelease=`uname -r`
+$ECHO "Performing $platform-specific tests"
+$ECHO "Operating System Version: $osrelease"
+osmaj=`$ECHO "$osrelease" | cut -d. -f1`
+osmin=`$ECHO "$osrelease" | cut -d. -f2`
+#
+# Try and run isainfo to if we can get the instruction set architecture
+#
+(isainfo -n) 1>/dev/null 2>/dev/null
+if [ $? -ne 0 ];then
+  $ECHO "Cannot find isainfo command - assuming 32bit Solaris"
+  ISA="32"
+else
+  INFO=`isainfo -n`
+  if [ "$INFO" = "sparcv9" ];then
+    ISA="64"
+  else
+    ISA="32"
+  fi
+  cat <<EOF
+
+You appear to be running $INFO (${ISA}bit).
+There may be multiple $PRODUCTLONG distributions which should
+work on this platform. 32bit distributions can be used on all Solaris 
+platforms (including sparcv9) but 64bit distributions can only be
+used on sparcv9.
+
+EOF
+fi
+if [ -x ./testlib ];then
+  ./testlib 1>/dev/null 2>/dev/null
+  if [ $? -ne 0 ];then
+    cat <<EOF
+
+ERROR:
+Cannot execute ./testlib which indicates the other binaries and shared
+objects in this distribution are not compatible with your system.
+Perhaps you are installing the sparcv9 (64bit) distribution on a 32bit
+Sparc platform or the 32bit distribution on a platform only capable or
+running sparcv9 binaries (less likely).
+
+EOF
+  exit 3
+  fi
+fi
+exit 0
+
+
+
+
+

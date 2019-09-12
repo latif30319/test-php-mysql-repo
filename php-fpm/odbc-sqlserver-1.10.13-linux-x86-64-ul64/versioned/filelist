@@ -1,0 +1,7 @@
+libeslicshr_r.so lib
+libeslicshr.so lib
+libesextra_r.so lib
+libesextra.so lib
+libessupp_r.so lib
+libessupp.so lib
+libestdscrypt.so lib

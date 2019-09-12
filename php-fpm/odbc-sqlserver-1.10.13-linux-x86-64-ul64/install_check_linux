@@ -1,0 +1,122 @@
+#
+# Copyright (c) 1999-2005 Easysoft Ltd. All rights reserved.
+#
+# This script checks this Linux is OK for this product
+#
+# Calling format:
+#
+# install_check_linux long_product_name testlibflag
+#
+# long_product_name - name of product being installed (may contain spaces)
+# testlibflag = if 1 runs ./testlib to check for libc5/glibc compatability
+#               if 0 this check is not performed
+# returns:
+#
+# 0 = success
+# 1 = invalid command line
+# 2 = environment variable not defined
+# 3 = Linux kernel, libs not acceptable
+#
+# $Id: install_check_linux 24 2005-02-11 09:08:42Z martin $
+#
+if [ "$ECHO" = "" ];then
+  echo "error - ECHO not defined, expect it to be exported"
+  exit 2
+fi
+#
+# Check command line
+#
+cmdline_error=""
+if [ $# -ne 2 ];then
+  cmdlinestr="incorrect number of parameters"
+  cmdline_error="1"
+else
+  PRODUCTLONG="$1"
+  TESTLIBFLAG="$2"
+fi
+#
+# If command line error
+#
+if [ "$cmdline_error" = "1" ];then
+  $ECHO "Invalid command line, $cmdlinestr"
+  $ECHO "Usage:"
+  $ECHO "install_check_linux text_notice_file"
+  exit 1
+fi
+#
+#
+#
+osrelease=`uname -r`
+$ECHO "Performing $platform-specific tests"
+$ECHO "Operating System Version: $osrelease"
+osmaj=`$ECHO "$osrelease" | cut -d. -f1`
+osmin=`$ECHO "$osrelease" | cut -d. -f2`
+#
+#  Output warning for development kernels.
+#
+if [ "$osmaj" = "2" -a "$osmin" = "3" ];then
+  cat <<EOF
+****
+WARNING:
+You appear to be running a development kernel. Easysoft have not verified the
+ODBC-ODBC Bridge works with development kernels although it is not believed
+there is anything in the ODBC-ODBC Bridge which would prevent it working
+with current development kernels.
+****
+EOF
+fi
+#
+#  Output incompatible for 1.n kernels.
+#
+if [ "$osmaj" = "1" ];then
+  cat <<EOF
+****
+WARNING:
+You appear to be running a 1.n series Linux kernel. Easysoft have not verified
+the $PRODUCTLONG works with these kernels and it is thought that they
+probably will not. Please contact us at $SUPPORT_EMAIL if you
+find otherwise.
+****
+EOF
+fi
+#
+#  Try and run our testlib program which is linked with the same version
+#  of libc5/glibc as the rest of the distribution. If it doesn't run the
+#  user is probably trying to install the wrong version of product
+#  on this machine.
+#
+if [ "$TESTLIBFLAG" = "1" ];then
+  if [ -x ./testlib ]; then
+    $ECHO "Testing this machine for libc5/glibc compatability."
+    response=`./testlib`
+    if [ \( $? -ne 0 \) -o \( "$response" != "hello4" \) ];then
+      cat <<EOF
+The test program (./testlib) failed to run correctly. The likely causes of this
+are:
+
+[1] You are installing the wrong version of the $PRODUCTLONG for this
+    machine. e.g. installing a glibc version on a machine without glibc.
+    The preceding output is likely to mention undefined symbols such as
+    "__register_frame_info" in this case.
+
+    If this is the case then you should download the other version of
+    $PRODUCTLONG and install that.
+
+[2] You are installing the $PRODUCTLONG on a machine with an incompatible
+    version of glibc. e.g. installing the glibc version on a machine which
+    has a version of glibc before 2.1.n.
+
+    If this is the case then you will need to upgrade glibc to at least 2.1.n.
+
+The installation is being aborted due to incompatible C runtime library.
+EOF
+      exit 99
+    else
+    $ECHO "Passed C runtime library check"
+    fi
+  else
+    $ECHO "Runtime library check skipped due to missing distribution "
+    $ECHO "testlib program."
+  fi
+fi
+exit 0

@@ -1,0 +1,6 @@
+[Easysoft ODBC-SQL Server SSL]
+Driver		= %EASYSOFT_ROOT%/sqlserver/lib/libessqlsrv_ssl.so
+Setup		= %EASYSOFT_ROOT%/sqlserver/lib/libessqlsrvS.so
+Threading		= 0
+FileUsage       = 1
+DontDLClose     = 1

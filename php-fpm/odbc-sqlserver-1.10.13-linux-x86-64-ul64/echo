@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+# Copyright (c) 2000-2005 Easysoft Ltd. All rights reserved.
+#
+# Simple replacement for non-POSIX echo.
+#
+# $Id: echo 32 2005-03-02 17:59:57Z martin $
+#
+# $Log: echo,v $
+# Revision 1.2  2001/11/27 15:48:37  martin
+# mishandled * in arguments due to missing ".
+#
+# Revision 1.1  2001/11/26 09:03:25  martin
+# Initial revision
+#
+#
+if [ $# -lt 1 ];then
+    exit 0
+fi
+ARGS=""
+for i in $@
+do
+  ARGS="${ARGS}${i} "
+done
+echo $ARGS | grep '\\\c' 2>/dev/null 1>/dev/null
+if [ $? -eq 0 ];then
+  FARGS=`echo "$ARGS" | sed -e 's/\\\c//g'`
+  echo -n "$FARGS"
+else
+  echo "$@"
+fi

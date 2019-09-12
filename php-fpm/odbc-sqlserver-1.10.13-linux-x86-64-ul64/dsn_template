@@ -1,0 +1,24 @@
+[SQLSERVER_SAMPLE]
+Driver          = Easysoft ODBC-SQL Server
+Description     = Easysoft SQL Server ODBC driver
+Server          = server.domain.com
+Port            = 1433
+Database        = northwind
+User            = sa
+Password        = password
+Mars_Connection = No
+Logging         = No
+LogFile         =
+QuotedId        = Yes
+AnsiNPW         = Yes
+Language        =
+Version7	 	= No
+ClientLB		= No
+Failover_Partner = 
+VarMaxAsLong	= No
+DisguiseWide	= No
+DisguiseLong	= No
+DisguiseGuid	= No
+Trusted_Connection = No
+Trusted_Domain 	=
+IPv6			= No

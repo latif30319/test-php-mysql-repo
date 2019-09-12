@@ -1,0 +1,51 @@
+END USER LICENSE AGREEMENT FOR EASYSOFT SOFTWARE
+
+IMPORTANT-READ CAREFULLY: Be Sure To Carefully Read And Understand All Of The Rights And Restrictions Described In This Easysoft End-User License  Agreement ("Agreement").
+
+This Agreement Is A Legal Agreement Between You (Either An Individual OR A Single Entity) And Easysoft For The Easysoft SOFTWARE Accompanying This Agreement, Which Includes The Accompanying Computer SOFTWARE. By Installing The SOFTWARE, You Agree To Be Bound By The Terms Of This Agreement. If You Do Not Agree To The Terms Of This Agreement, You May Not Install Or Use The  SOFTWARE.
+
+SOFTWARE PRODUCT LICENSE
+
+The SOFTWARE is protected by copyright laws and international copyright treaties, as well as other intellectual property laws and treaties. The SOFTWARE is licensed, not sold.
+
+1. Grant of License.
+
+Your license grants you the following non-exclusive rights to the SOFTWARE:
+
+a) You may install the SOFTWARE on a single computer or network. NOTE: A license for the SOFTWARE may not be granted if no purchase consideration for fees has taken place between you and the supplier of the SOFTWARE. You may copy the licensed software for back up purposes. A license for the  SOFTWARE may not be shared or used concurrently on different computers.
+
+b) Evaluation SOFTWARE. Easysoft may grant you the right to use the SOFTWARE on a royalty-free basis for evaluation purposes only and for a period of not  more than 14 days. At the end of this period if you do not purchase the SOFTWARE, you must destroy all copies of the SOFTWARE supplied to you, including copies installed on any computer, and all related documentation. You disclaim all warranties, either express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose and non-infringement, with respect to the  Evaluation SOFTWARE and the accompanying written materials. In no event will Easysoft be liable to you for damages, including any loss of profits, lost savings or other incidental or consequential damages arising out of your use or inability to use the Evaluation
+
+SOFTWARE.
+2. Restrictions.
+
+Any attempt to defeat or circumvent these SOFTWARE-enforced restrictions is a Breach of this agreement.
+
+a) Copyright. You must maintain all copyright notices on all copies of the
+SOFTWARE.
+
+b) Limitations of Reverse Engineering, Decompilation and Disassembly. You may not reverse engineer, decompile or disassemble the SOFTWARE, except and only to the extent that such activity is expressly permitted by applicable law not withstanding this limitation.
+
+c) Rental. You may not rent or lease or lend the SOFTWARE.
+
+d) SOFTWARE Transfer. You may not transfer your rights under this agreement.Support Services.
+
+3. Support. Easysoft may provide you with support services related to the
+SOFTWARE ("Support Services"). Use of Support Services is governed by the
+Easysoft Support Contract.
+
+4. Termination. Without prejudice to any other rights Easysoft may terminate this agreement if you fail to comply with the terms and conditions of this agreement. In such event, you must destroy all copies of the SOFTWARE and all of its component parts.
+
+5. Copyright. All title and copyrights in and to the SOFTWARE and the accompanying written materials are owned by Easysoft. Unauthorised copying of the SOFTWARE, including SOFTWARE that has been modified, merged, or included with other SOFTWARE, or of written materials, is expressly forbidden. Any alteration, change or removal of any identification from the SOFTWARE, including but not limited to copyright, trademark or other notices or proprietary legends is forbidden.
+
+6. Limited Warranty. Unless otherwise expressed in this agreement, Easysoft warrants that the SOFTWARE will conform substantially to the documentation in effect for the SOFTWARE when delivered, for a period of sixty (60) days (the warranty period) from the date of delivery to you. Easysoft warrants that it has a right to grant the license. Providing that the SOFTWARE is used on the computer and with the operating system for which it was designed and is used in the manner set out in the user manual with the SOFTWARE and hardware equipment specified in the SOFTWARE product description, any demonstrable errors in the SOFTWARE or related documentation notified to Easysoft within the warranty period will be corrected within a reasonable time or at Easysoft's option provide or authorise a refund of the price of the SOFTWARE (against return of the SOFTWARE, and it's related documentation). Easysoft makes no other warranties, express or implied, on any other licensed SOFTWARE, including but not limited to all implied warranties of merchantability and
+fitness for a particular purpose.
+
+7. Limited Liability. Unless otherwise expressed in this agreement Easysoft's entire liability to you for any cause whatsoever is limited to the amount paid for the  SOFTWARE that is the subject matter of the cause of action. In no event shall Easysoft be liable for damages for loss of data, profits or use of the SOFTWARE or for special, indirect, incidental or consequential damages except personal injury or death resulting from Easysoft's negligence or otherwise except as expressly provided herein.
+
+8. Patent and Copyright Indemnity. Easysoft will defend or settle at it's expense any action brought against you to the extent that is based on a claim that the SOFTWARE, used within the scope of this agreement, infringes a copyright or existing patent. Easysoft will pay any cost, damages and legal fees awarded against you in such actions, which are directly attributable to such claim, provided that you notify Easysoft promptly in writing of the claim, that Easysoft is given complete authority and co-operation by you and all information necessary for it to conduct the defence or settlement of such claim. Should the SOFTWARE become, or in Easysoft's opinion be likely to become, the subject of a claim for infringement of a copyright or patent, Easysoft may procure for you the right to continue to use the SOFTWARE or replace or modify the SOFTWARE to make it non-fringing. In such an event, Easysoft shall have no further liability to you in respect thereof.
+
+9. Rights and remedies. In the event of any violation of this Agreement or failure to comply with any of the terms and conditions set forth herein, or any other violation or infringement of any of Easysoft's rights, Easysoft shall have available all rights and remedies at law and in equity. Without limiting the foregoing, in the event of any such violation or failure to comply, then in addition to its other rights and remedies, if Easysoft so elects Easysoft shall have the right to seek damages of not less than 1,000,000.00 UK Pounds Sterling.
+
+10. Miscellaneous. This Agreement constitutes the entire agreement between the parties with respect to the subject matter hereof. This Agreement supersedes any written or oral agreement between Easysoft and you. This Agreement shall apply, unless Easysoft and you have agreed in writing to variations and additions notwithstanding any proposed variations or additions, which may appear in any purchase order to Easysoft by you. Any modification of the terms of this license must specifically refer to this license and must contain the written signature of an authorised representative of Easysoft and you. No representative of Easysoft has been authorised to make any representation, warranty or promise not contained in this license. In the event that any provisions of this license are held to be illegal or otherwise unenforceable, the entire license shall fail because of the severance of unenforceable provisions. This Agreement is governed by and interpreted in accordance with English Law.
+

@@ -1,0 +1,181 @@
+#/bin/sh
+#
+# Copyright (c) 2000-2005 Easysoft Ltd. All rights reserved.
+#
+# $Id: cmpver 26 2005-02-25 10:40:05Z martin $
+#
+# This script is used to decide whether to install a shared object.
+# Some shared objects are included in mutliple Easysoft products and the
+# intention is to only install a newer version and nver downgrade.
+#
+# cmpver file1 file2
+#
+# file1 should be the file (including path) we have in the installation and
+# want to know if it should be installed or not.
+# file2 should be the same file but the path will be to the installed
+# location.
+#
+# The mechanism used is to extract the "Built" date out of the shared object
+# and compare. If file2 does not exist then obviously the shared object in
+# the installation should be installed.
+#
+# This script returns:
+#   0 - install file1 as file2 does not exist or is older.
+#   1 - do not install file1 as file2 is newer.
+#   >1 - an error
+#
+if [ "$ECHO" = "" ];then
+  echo "error - ECHO not defined, expect it to be exported"
+  exit 2
+fi
+if [ \( $# -ne 2 \) -a \( $# -ne 3 \) ];then
+  $ECHO "usage: cmpver newfile existingfile [ident]"
+  $ECHO "Invalid number of parameters"
+  exit 2
+fi
+if [ $# -gt 2 ];then
+  IDENT=$3
+else
+  IDENT="ident"
+fi
+#echo "Checking versions of $1 and $2"
+$ECHO ".\c"
+file1=$1
+file2=$2
+#
+# file1 must exist as it is new but file2 may not have been installed yet.
+#
+if [ ! -r $file1 ];then
+  $ECHO "Error: $file1 does not exist"
+  exit 3
+fi
+#
+# If file2 does not exist then file1 should be installed.
+#
+if [ ! -r $file2 ];then
+ exit 0
+fi
+#
+# Check we have ident in the cwd.
+#
+if [ ! -x $IDENT ]; then
+  $ECHO "Error: $IDENT not found or not executable"
+  exit 4
+fi
+#
+# Find the Built date for file1
+#
+built1=`$IDENT $file1 | grep Built | head -1`
+built2=`$IDENT $file2 | grep Built | head -1`
+if [ "$built1" = "" ];then
+  $ECHO "Warning: No Built date found in $file1"
+  #
+  # Assume it is newer
+  #
+  exit 0
+fi
+if [ "$built2" = "" ];then
+  $ECHO "Warning: No Built date found in $file2"
+  #
+  # Assume it is older
+  #
+  exit 0
+fi
+#
+#  Check the number of fields in the extracted built entries
+#
+flds1=`echo $built1 | awk '{print NF}'`
+flds2=`echo $built2 | awk '{print NF}'`
+if [ $flds1 -ne 6 ];then
+  if [ $flds1 -ne 4 ];then
+    $ECHO "Error: Invalid number of fields in $built1 for $file1"
+    exit 5
+  fi
+fi
+if [ $flds2 -ne 6 ];then
+  if [ $flds2 -ne 4 ];then
+    $ECHO "Error: Invalid number of fields in $built2 for $file2"
+    exit 6
+  fi
+fi
+#
+#  Get the date out of the Built string
+#
+if [ $flds1 -eq 6 ];then	# assuming both dates in same format
+  date1=`echo $built1 | grep Built | awk '{printf("%s %s %s",$2,$3,$4)}'`
+  date2=`echo $built2 | grep Built | awk '{printf("%s %s %s",$2,$3,$4)}'`
+  #
+  # Split up the date into month, day and year.
+  #
+  month1=`echo $date1 | awk '{print $1}'`
+  dmonth1=`echo $month1 | awk 'BEGIN{mon["Jan"]=1;mon["Feb"]=2;mon["Mar"]=3;mon["Apr"]=4;mon["May"]=5;mon["Jun"]=6;mon["Jul"]=7;mon["Aug"]=8;mon["Sep"]=9;mon["Oct"]=10;mon["Nov"]=11;mon["Dec"]=12;} {printf "%02d",mon[$1]}'`
+  day1=`echo $date1 | awk '{print $2}'`
+  year1=`echo $date1 | awk '{print $3}'`
+  if [ \( "$month1" = "" \) -o \( "$day1" = "" \) -o \( "$year1" = "" \) ];then
+    $ECHO "Invalid date $date1 in $file1"
+    exit 7
+  fi
+  #
+  month2=`echo $date2 | awk '{print $1}'`
+  dmonth2=`echo $month2 | awk 'BEGIN{mon["Jan"]=1;mon["Feb"]=2;mon["Mar"]=3;mon["Apr"]=4;mon["May"]=5;mon["Jun"]=6;mon["Jul"]=7;mon["Aug"]=8;mon["Sep"]=9;mon["Oct"]=10;mon["Nov"]=11;mon["Dec"]=12;} {printf "%02d",mon[$1]}'`
+  day2=`echo $date2 | awk '{print $2}'`
+  year2=`echo $date2 | awk '{print $3}'`
+  if [ \( "$month2" = "" \) -o \( "$day2" = "" \) -o \( "$year2" = "" \) ];then
+    $ECHO "Invalid date $date2 in $file2"
+    exit 7
+  fi
+else
+  date1=`echo $built1 | grep Built | awk '{print $2}' | awk -F/ '{printf("%s %s %s",$1,$2,$3)}'`
+  date2=`echo $built2 | grep Built | awk '{print $2}' | awk -F/ '{printf("%s %s %s",$1,$2,$3)}'`
+  #
+  # Split up the date into month, day and year.
+  #
+  dmonth1=`echo $date1 | awk '{print $1}'`
+  day1=`echo $date1 | awk '{print $2}'`
+  year1=`echo $date1 | awk '{print $3}'`
+  if [ \( "$dmonth1" = "" \) -o \( "$day1" = "" \) -o \( "$year1" = "" \) ];then
+    $ECHO "Invalid date $date1 in $file1"
+    exit 7
+  fi
+  #
+  dmonth2=`echo $date2 | awk '{print $1}'`
+  day2=`echo $date2 | awk '{print $2}'`
+  year2=`echo $date2 | awk '{print $3}'`
+  if [ \( "$dmonth2" = "" \) -o \( "$day2" = "" \) -o \( "$year2" = "" \) ];then
+    $ECHO "Invalid date $date2 in $file2"
+    exit 7
+  fi
+fi
+#
+#  Now compare the dates of the two files
+#
+#echo "months: $month1 ($dmonth1), $month2 ($dmonth2)"
+#echo "days: $day1 $day2"
+#echo "years: $year1 $year2"
+if [ $year1 -lt $year2 ];then
+  #echo "$file1 is older than $file2 due to year"
+  exit 1
+elif [ $year1 -gt $year2 ];then
+  #echo "$file1 is newer than $file2 due to year"
+  exit 0
+else
+  if [ $dmonth1 -lt $dmonth2 ];then
+    #echo "$file1 is older than $file2 due to month"
+    exit 1
+  elif [ $dmonth1 -gt $dmonth2 ];then
+    #echo "$file1 is newer than $file2 due to month"
+    exit 0
+  else
+    if [ $day1 -lt $day2 ];then
+      #echo "$file1 is older than $file2 due to day"
+      exit 1
+    elif [ $day1 -gt $day2 ];then
+      #echo "$file1 is newer than $file2 due to day"
+      exit 0
+    else
+      #echo "The files are the same date"
+      exit 0
+    fi
+  fi
+fi
+

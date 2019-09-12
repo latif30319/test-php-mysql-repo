@@ -1,0 +1,3 @@
+The Easysoft ODBC-SQL Server Driver requires an ODBC driver manager to be 
+installed.  The ODBC driver manager allows applications to pick the ODBC 
+driver they want to use and the data sources they want to connect to.

@@ -1,0 +1,169 @@
+#
+# Copyright (c) 1999-2005 Easysoft Ltd. All rights reserved.
+#
+# $Id: install_versioned 58 2005-07-01 14:00:04Z martin $
+#
+# This script installs versioned shared objects
+#
+# Calling format:
+#
+# install_versioned product_install_path
+#
+# product_install_dir - base easysoft install path
+#
+# returns:
+#
+# 0 = success
+# 1 = invalid command line
+# 2 = environment variable not defined
+# 3 = file not found
+# 4 = create file/dir failure
+# 5 = permission denied
+#
+VERFILELIST="filelist"
+FILEMODLIST="filemods"
+if [ "$ECHO" = "" ];then
+  echo "error - ECHO not defined, expect it to be exported"
+  exit 2
+fi
+$ECHO
+$ECHO "$0 script running to install Easysoft shared components"
+if [ "$TESTEXISTS" = "" ];then
+  echo "error - TESTEXISTS not defined, expect it to be exported"
+  exit 2
+fi
+if [ "$TESTLINK" = "" ];then
+  echo "error - TESTLINK not defined, expect it to be exported"
+  exit 2
+fi
+#
+# Check command line
+#
+cmdline_error=""
+if [ $# -ne 1 ];then
+  cmdlinestr="incorrect number of parameters"
+  cmdline_error="1"
+else
+  PRODUCTINSTALLPATH="$1"
+fi
+#
+# If command line error
+#
+if [ "$cmdline_error" = "1" ];then
+  $ECHO "\"$*\""
+  $ECHO "Invalid command line, $cmdlinestr"
+  $ECHO "Usage:"
+  $ECHO "install_versioned product_install_path"
+  exit 1
+fi
+#
+# Install Versioned Common files
+# ==============================
+#
+cwd=`pwd`
+NOCMPVER="0"
+if [ ! -x ./cmpver ];then
+  $ECHO "WARNING: cmpver script missing so all versioned shared objects"
+  $ECHO "will be installed. Please report this to Easysoft support."
+  NOCMPVER="1"
+fi
+if [ -d versioned ];then
+  if [ ! $TESTEXISTS "versioned/$VERFILELIST" ];then
+    $ECHO "WARNING: versioned directory exists but no $VERFILELIST"
+    $ECHO "Please report this to Easysoft support."
+  else
+    cd versioned
+    for vfile in `ls * | grep -v $VERFILELIST | grep -v $FILEMODLIST`
+    do
+      vsubdir=`grep $vfile $VERFILELIST | awk '{print $2}'`
+      if [ "$vsubdir" = "" ];then
+        $ECHO "Unable to locate $vfile in versioned/$VERFILELIST"
+        $ECHO "Please report this to Easysoft support."
+      else
+        copyfile="0"
+        if [ ! -d "$PRODUCTINSTALLPATH/$vsubdir" ];then
+          $ECHO "Creating $PRODUCTINSTALLPATH/$vsubdir"
+          mkdir "$PRODUCTINSTALLPATH/$vsubdir"
+	  if [ $? -ne 0 ];then
+	    $ECHO "Failed to create $PRODUCTINSTALLPATH/$vsubdir"
+	    exit 4;
+          fi
+        fi
+        if [ ! $TESTEXISTS "$PRODUCTINSTALLPATH/$vsubdir/$vfile" ];then
+          #$ECHO "versioned shared file $PRODUCTINSTALLPATH/$vsubdir/$vfile"
+          #$ECHO "does not exist - installing."
+          copyfile="1"
+        else
+          ../cmpver $vfile "$PRODUCTINSTALLPATH/$vsubdir/$vfile" ../ident
+          if [ \( $? -eq 0 \) -o \( $? -gt 1 \) ];then
+	      #$ECHO "versioned shared file $PRODUCTINSTALLPATH/$vsubdir/$vfile"
+	      #$ECHO " is old - replacing"
+	      copyfile="1"
+	      mv "$PRODUCTINSTALLPATH/$vsubdir/$vfile" "$PRODUCTINSTALLPATH/$vsubdir/$vfile.old"
+	  else
+	      #$ECHO "$PRODUCTINSTALLPATH/$vsubdir/$vfile"
+	      #$ECHO "  is newer - no action"
+	      pwd 1>/dev/null 2>/dev/null
+          fi
+        fi
+        if [ "$copyfile" = "1" ];then
+          cp $vfile "$PRODUCTINSTALLPATH/$vsubdir/$vfile"
+	  if [ $? -ne 0 ];then
+	    $ECHO "Failed to install $vfile"
+	    exit 4
+	  fi
+        fi
+      fi			# end of no subdir in filelist for file
+    done			# end of loop through versioned files
+    cd $cwd
+  fi
+  $ECHO
+  if [ $TESTEXISTS "versioned/$FILEMODLIST" ]; then
+    cd versioned
+    for file in `awk '{print $1}' < $FILEMODLIST`
+    do
+      line=`grep "^$file " $FILEMODLIST`
+      #
+      # Test there are the correct number of arguments per line.
+      #
+      words=`$ECHO $line | wc -w`
+      if [ $words -ne 4 ];then
+        $ECHO "Invalid line in $FILEMODLIST file /$line/"
+        $ECHO "Please save this text and contact Easysoft support."
+      else
+        file2=`$ECHO $line | awk '{print $2}'`
+        dest=`$ECHO $line | awk '{print $3}'`
+        ops=`$ECHO $line | awk '{print $4}'`
+        #
+        # If file exists but is not a link
+        #
+        if [ $TESTEXISTS "$PRODUCTINSTALLPATH/$dest/$file" ];then
+          if [ ! $TESTLINK "$PRODUCTINSTALLPATH/$dest/$file" ];then
+            #
+            # Rename
+            #
+	    $ECHO $ops | grep "remove" 2>/dev/null 1>/dev/null
+	    if [ $? -eq 0 ];then
+	      $ECHO "Renaming old file $PRODUCTINSTALLPATH/$dest/$file to $PRODUCTINSTALLPATH/$dest/$file.outofdate"
+	      mv "$PRODUCTINSTALLPATH/$dest/$file" "$PRODUCTINSTALLPATH/$dest/$file.outofdate"
+	    fi
+            #
+            # symbolic link
+            #
+	    $ECHO $ops | grep "link" 1> /dev/null 2> /dev/null
+	    if [ $? -eq 0 ];then
+	      $ECHO "Linking $PRODUCTINSTALLPATH/$dest/$file => $PRODUCTINSTALLPATH/$dest/$file2"
+	      ln -s "$PRODUCTINSTALLPATH/$dest/$file2" "$PRODUCTINSTALLPATH/$dest/$file"
+	    fi
+	  fi
+        fi
+      fi
+    done
+    cd $cwd
+  fi
+else
+  $ECHO "versioned directory not found - assuming no versioned files"
+fi
+cd $cwd
+$ECHO
+exit 0

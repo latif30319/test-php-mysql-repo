@@ -1,0 +1,5 @@
+You can still install the Easysoft ODBC-SQL Server Driver but the 
+installation will be unable to update the dynamic linker search paths 
+or install the driver under the unixODBC Driver Manager (the latter is 
+not necessary).  You may complete these processes manually by consulting 
+the INSTALL file in the current directory.
