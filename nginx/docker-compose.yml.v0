@@ -1,0 +1,21 @@
+web:
+# testing the nginx web server
+  image: nginx:latest
+  ports:
+    - "80:80"
+  volumes:
+    - ./code:/code
+    - ./site.conf:/etc/nginx/conf.d/site.conf
+  links:
+    - php
+php:
+  image: php:7-fpm
+  volumes:
+    - ./code:/code
+  links: 
+    - mssql
+mssql:
+  image: latif-mssql2017:latest 
+  ports:
+    - "1433:1433"
+

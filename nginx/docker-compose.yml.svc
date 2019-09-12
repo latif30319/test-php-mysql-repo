@@ -1,0 +1,35 @@
+version: "3.3"
+services:
+  web:
+    # testing the nginx web server
+    image: nginx:latest
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure 
+    ports:
+        - "80:80"
+    networks:
+        - webnet
+    volumes:
+        - ./code:/code
+        - ./site.conf:/etc/nginx/conf.d/site.conf
+    links:
+        - php
+  php:
+    image: php:7-fpm
+    volumes:
+        - ./code:/code
+    links: 
+        - mssql
+  mssql:
+    image: latif-mssql2017:latest 
+    volumes:
+        - ./code:/code
+networks:
+    webnet:
+
