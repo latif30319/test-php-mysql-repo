@@ -26,9 +26,9 @@ services:
     # So you don't have to use root, but you can if you like
     MYSQL_USER: 'a-latifa'
     # You can use whatever password you like
-    MYSQL_PASSWORD: 'Ret0@l012990'
+    MYSQL_PASSWORD: 'Xxx9@x999999'
     # Password for root access
-    MYSQL_ROOT_PASSWORD: 'Ret0@l012990'
+    MYSQL_ROOT_PASSWORD: 'Xxx9@x999999'
       # Where our data will be persisted
   volumes:
     - latif-mysqldb:/var/lib/mysql
